@@ -1,0 +1,78 @@
+//Draw a triangle with resolution 11x10 with pixel size 25
+SetResolution(11, 10, 25, true)
+
+SetColor(1.0, 0.0, 0.0)
+DrawPixel(5, 1)
+
+SetColor(0.0, 1.0, 0.0)
+DrawPixel(5, 2)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(4, 2)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(6, 2)
+
+SetColor(0.0, 1.0, 0.0)
+DrawPixel(5, 3)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(4, 3)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(6, 3)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(3, 3)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(7, 3)
+
+SetColor(0.0, 1.0, 0.0)
+DrawPixel(5, 4)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(4, 4)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(6, 4)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(3, 4)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(7, 4)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(8, 4)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(2, 4)
+
+SetColor(0.0, 1.0, 0.0)
+DrawPixel(5, 5)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(4, 5)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(6, 5)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(3, 5)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(7, 5)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(8, 5)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(2, 5)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(9, 5)
+
+SetColor(0.0, 0.0, 1.0)
+DrawPixel(1, 5)
+
