@@ -1,28 +1,31 @@
 #include "CmdAddVertex.h"
-#include "PrimativesManager.h"
+#include "PrimitivesManager.h"
 
 bool CmdAddVertex::Execute(const std::vector<std::string>& params)
 {
 	float x, y, z = 0.0f;
-	float r, g, b = 1.0f;
-
-	if (params.size() == 2) {
+	float r, g, b = 0.0f;
+	if (params.size() == 2)
+	{
 		x = stof(params[0]);
 		y = stof(params[1]);
 	}
-	else if (params.size() == 3) {
+	else if (params.size() == 3)
+	{
 		x = stof(params[0]);
 		y = stof(params[1]);
 		z = stof(params[2]);
 	}
-	else if (params.size() == 5) {
+	else if (params.size() == 5)
+	{
 		x = stof(params[0]);
 		y = stof(params[1]);
 		r = stof(params[2]);
 		g = stof(params[3]);
 		b = stof(params[4]);
 	}
-	else if (params.size() == 6) {
+	else if (params.size() == 6)
+	{
 		x = stof(params[0]);
 		y = stof(params[1]);
 		z = stof(params[2]);
@@ -38,7 +41,7 @@ bool CmdAddVertex::Execute(const std::vector<std::string>& params)
 	Vertex v;
 	v.pos = { x, y, z };
 	v.color = { r, g, b, 1.0f };
-
-	PrimativesManager::Get()->AddVertex(v);
+	PrimitivesManager::Get()->AddVertex(v);
 	return true;
+
 }
