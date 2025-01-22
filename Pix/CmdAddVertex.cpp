@@ -1,5 +1,5 @@
 #include "CmdAddVertex.h"
-#include "PrimitivesManager.h"
+#include "PrimativesManager.h"
 
 bool CmdAddVertex::Execute(const std::vector<std::string>& params)
 {
@@ -41,7 +41,7 @@ bool CmdAddVertex::Execute(const std::vector<std::string>& params)
 	Vertex v;
 	v.pos = { x, y, z };
 	v.color = { r, g, b, 1.0f };
-	PrimitivesManager::Get()->AddVertex(v);
+	PrimativesManager::Get()->AddVertex(v);
 	return true;
 
 }
