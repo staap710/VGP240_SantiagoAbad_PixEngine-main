@@ -186,6 +186,7 @@
     <ClCompile Include="CommandDictionary.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="MathHelper.cpp" />
+    <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="PixEditor.cpp" />
     <ClCompile Include="PrimativesManager.cpp" />
     <ClCompile Include="Rasterizer.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="CommandDictionary.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="MathHelper.h" />
+    <ClInclude Include="Matrix4.h" />
     <ClInclude Include="PixEditor.h" />
     <ClInclude Include="PrimativesManager.h" />
     <ClInclude Include="Rasterizer.h" />

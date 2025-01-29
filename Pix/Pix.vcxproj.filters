@@ -132,6 +132,9 @@
     <ClCompile Include="CmdSetClipping.cpp">
       <Filter>Commands</Filter>
     </ClCompile>
+    <ClCompile Include="Matrix4.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextEditor.h">
@@ -211,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="CmdSetClipping.h">
       <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
