@@ -6,7 +6,11 @@
 
 namespace MathHelper
 {
+	constexpr float DegToRad = 3.1416f / 180.0f;
+
 	bool IsEqual(float a, float b);
+
+	void FlattenVectorScreenCoords(Vector3& v);
 
 	float MagnitudeSquared(const Vector2& v);
 	float MagnitudeSquared(const Vector3& v);
@@ -24,10 +28,9 @@ namespace MathHelper
 
 	Vector3 TransformCoord(const Vector3& v, const Matrix4& m);
 	Vector3 TransformNormal(const Vector3& v, const Matrix4& m);
-	Matrix4 Inverse (const Matrix4& m);
+
+	Matrix4 Inverse(const Matrix4& m);
 	Matrix4 Transpose(const Matrix4& m);
 	Matrix4 Adjoint(const Matrix4& m);
-	Matrix4 Adjoint(const Matrix4& m);
-	float Determinant(const Matrix4& m);
-	Matrix4 Translation(float x, float y, float z);
+	float   Determinant(const Matrix4& m);
 }
