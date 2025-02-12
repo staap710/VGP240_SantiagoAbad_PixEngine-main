@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Vertex.h"
-
+#
 enum class Topology // 'class' -> Topology::Line
 {
 	Point,
@@ -9,11 +9,21 @@ enum class Topology // 'class' -> Topology::Line
 	Triangle
 };
 
+enum class CullMode {
+	None,
+	Back,
+	Front
+};
+
+
 class PrimativesManager
 {
 public:
 
 	static PrimativesManager* Get(); // Singleton
+
+	void OnNewFrame();
+	void SetCullMode(CullMode mode);
 
 	bool BeginDraw(Topology topology, bool applyTransform = false);
 
@@ -27,7 +37,9 @@ private:
 
 	std::vector<Vertex> mVertexBuffer;
 
+
 	Topology mTopology = Topology::Point;
+	CullMode mCullMode = CullMode::Back;
 	bool mDrawBegin = false;
 	bool mApplyTransform = false;
 };

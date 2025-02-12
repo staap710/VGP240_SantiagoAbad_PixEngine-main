@@ -141,6 +141,7 @@ struct Matrix4
 				dx, dy, dz, 1.0f);
 	}
 
+
 	static Matrix4 Translation(const Vector3& d)
 	{
 		return

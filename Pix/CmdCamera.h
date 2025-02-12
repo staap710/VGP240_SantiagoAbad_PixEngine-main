@@ -5,89 +5,91 @@
 class CmdSetCameraPosition : public Command
 {
 public:
-	const char* GetName() override
-	{
-		return "SetCameraPosition";
-	}
+    const char* GetName() override
+    {
+        return "SetCameraPosition";
+    }
 
-	const char* GetDescription() override
-	{
-		return "SetCameraPosition (x, y, z)"
-			"\n"
-			"- sets the camera position.";
-	}
+    const char* GetDescription() override
+    {
+        return
+            "SetCameraPosition(x, y, z)"
+            "\n"
+            "- sets the position of the camera";
+    }
 
-	bool Execute(const std::vector<std::string>& params) override;
+    bool Execute(const std::vector<std::string>& params) override;
 };
 
 class CmdSetCameraDirection : public Command
 {
 public:
-	const char* GetName() override
-	{
-		return "SetCameraDirection";
-	}
+    const char* GetName() override
+    {
+        return "SetCameraDirection";
+    }
 
-	const char* GetDescription() override
-	{
-		return "SetCameraPosition (x, y, z)"
-			"\n"
-			"- sets the camera's direction.";
-	}
+    const char* GetDescription() override
+    {
+        return
+            "SetCameraDirection(x, y, z)"
+            "\n"
+            "- sets the direction of the camera";
+    }
 
-	bool Execute(const std::vector<std::string>& params) override;
+    bool Execute(const std::vector<std::string>& params) override;
 };
 
 class CmdSetCameraNear : public Command
 {
 public:
-	const char* GetName() override
-	{
-		return "SetCameraNear";
-	}
+    const char* GetName() override
+    {
+        return "SetCameraNear";
+    }
 
-	const char* GetDescription() override
-	{
-		return "SetCameraNear (value)"
-			"\n"
-			"- sets the camera's near value/ distance.";
-	}
+    const char* GetDescription() override
+    {
+        return
+            "SetCameraNear(value)"
+            "- sets the camera near value";
+    }
 
-	bool Execute(const std::vector<std::string>& params) override;
+    bool Execute(const std::vector<std::string>& params) override;
 };
 
 class CmdSetCameraFar : public Command
 {
 public:
-	const char* GetName() override
-	{
-		return "SetCameraFar";
-	}
+    const char* GetName() override
+    {
+        return "SetCameraFar";
+    }
 
-	const char* GetDescription() override
-	{
-		return "SetCameraFar (value)"
-			"\n"
-			"- sets the camera's far value/ distance.";
-	}
+    const char* GetDescription() override
+    {
+        return
+            "SetCameraFar(value)"
+            "- sets the camera Far value";
+    }
 
-	bool Execute(const std::vector<std::string>& params) override;
+    bool Execute(const std::vector<std::string>& params) override;
 };
 
-class CmdSetCameraFov : public Command
+class CmdSetCameraFOV : public Command
 {
 public:
-	const char* GetName() override
-	{
-		return "SetCameraFov";
-	}
+    const char* GetName() override
+    {
+        return "SetCameraFov";
+    }
 
-	const char* GetDescription() override
-	{
-		return "SetCameraFar (radians)"
-			"\n"
-			"- sets the camera's field of view angle.";
-	}
+    const char* GetDescription() override
+    {
+        return
+            "SetCameraFov(radians)"
+            "- sets the camera field of view angle";
+    }
 
-	bool Execute(const std::vector<std::string>& params) override;
+    bool Execute(const std::vector<std::string>& params) override;
 };

@@ -23,4 +23,5 @@ private:
 	void RegisterCommand();
 
 	std::map<std::string, std::unique_ptr<Command>> mCommandMap;
+
 };
