@@ -52,8 +52,7 @@ const X::Color& MaterialManager::GetMaterialSpecular() const
 {
 	return mSpecular;
 }
-const float MaterialManager::GetMaterialShininess() const
+float MaterialManager::GetMaterialShininess() const
 {
 	return mShininess;
 }
-

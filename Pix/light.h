@@ -1,13 +1,14 @@
 #pragma once
 
 #include "MathHelper.h"
-#include "xColors.h"
+#include "XColors.h"
 
 class Light
 {
 public:
 	virtual ~Light() = default;
-	virtual X::Color ComputeLightColor(const Vector3& position, const Vector3& normal) = 0;
+	virtual X::Color ComputeLightColor(const Vector3& position,
+		const Vector3& normal) = 0;
 
 	void SetAmbient(const X::Color& color) { mAmbient = color; }
 	void SetDiffuse(const X::Color& color) { mDiffuse = color; }
@@ -17,4 +18,4 @@ protected:
 	X::Color mAmbient = X::Colors::White;
 	X::Color mDiffuse = X::Colors::White;
 	X::Color mSpecular = X::Colors::White;
-};;
+};

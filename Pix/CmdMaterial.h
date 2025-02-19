@@ -2,7 +2,6 @@
 
 #include "Command.h"
 
-
 class CmdSetMaterialEmissive : public Command
 {
 public:
@@ -10,12 +9,12 @@ public:
 	{
 		return "SetMaterialEmissive";
 	}
+
 	const char* GetDescription() override
 	{
-		return
-			"SetMaterialEmissive(r, g, b)\n"
+		return "SetMaterialEmissive(r, g, b)\n"
 			"\n"
-			"- sets emissive color for a material";
+			"- Sets the Emissive Color for a material.";
 	}
 
 	bool Execute(const std::vector<std::string>& params) override;
@@ -28,12 +27,12 @@ public:
 	{
 		return "SetMaterialAmbient";
 	}
+
 	const char* GetDescription() override
 	{
-		return
-			"SetMaterialAmbient(r, g, b)\n"
+		return "SetMaterialAmbient(r, g, b)\n"
 			"\n"
-			"- sets ambient color for a material";
+			"- Sets the Ambient Color for a material.";
 	}
 
 	bool Execute(const std::vector<std::string>& params) override;
@@ -44,14 +43,14 @@ class CmdSetMaterialDiffuse : public Command
 public:
 	const char* GetName() override
 	{
-		return "SetMaterialDiffuse";
+		return "SetMateriaDiffuse";
 	}
+
 	const char* GetDescription() override
 	{
-		return
-			"SetMaterialDiffuse(r, g, b)\n"
+		return "SetMaterialDiffuse(r, g, b)\n"
 			"\n"
-			"- sets diffuse color for a material";
+			"- Sets the Diffuse Color for a material.";
 	}
 
 	bool Execute(const std::vector<std::string>& params) override;
@@ -64,12 +63,12 @@ public:
 	{
 		return "SetMaterialSpecular";
 	}
+
 	const char* GetDescription() override
 	{
-		return
-			"SetMaterialSpecular(r, g, b)\n"
+		return "SetMaterialSpecular(r, g, b)\n"
 			"\n"
-			"- sets Specular color for a material";
+			"- Sets the Specular Color for a material.";
 	}
 
 	bool Execute(const std::vector<std::string>& params) override;
@@ -82,12 +81,12 @@ public:
 	{
 		return "SetMaterialShininess";
 	}
+
 	const char* GetDescription() override
 	{
-		return
-			"SetMaterialShininess(value)\n"
+		return "SetMaterialshininess(shininess)\n"
 			"\n"
-			"- sets shininess value for a material";
+			"- Sets the Shininess Value for a material.";
 	}
 
 	bool Execute(const std::vector<std::string>& params) override;
