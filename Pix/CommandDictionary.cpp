@@ -16,6 +16,9 @@
 #include "CmdMatrix.h"
 #include "CmdCamera.h"
 #include "CmdSetCullMode.h"
+#include "CmdMaterial.h"
+#include "CmdLights.h"
+
 
 
 
@@ -66,6 +69,13 @@ CommandDictionary::CommandDictionary()
 	RegisterCommand<CmdSetCameraNear>();
 	RegisterCommand<CmdSetCameraFar>();
 	RegisterCommand<CmdSetCameraFOV>();
+
+	//Material commands
+	RegisterCommand<CmdSetMaterialEmissive>();
+	RegisterCommand<CmdSetMaterialAmbient>();
+	RegisterCommand<CmdSetMaterialDiffuse>();
+	RegisterCommand<CmdSetMaterialSpecular>();
+	RegisterCommand<CmdSetMaterialShininess>();
 
 }
 
