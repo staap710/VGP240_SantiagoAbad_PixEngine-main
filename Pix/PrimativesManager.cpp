@@ -143,10 +143,23 @@ bool PrimativesManager::EndDraw()
 				for (size_t t = 0; t < triangle.size(); ++t)
 				{
 					triangle[t].pos = MathHelper::TransformCoord(triangle[t].pos, matWorld);
+					triangle[t].posWorld= triangle[t].pos;
 				}
+				if (MathHelper::IsEqual(MathHelper::MagnitudeSquared(triangle[0].pos,triangle[0].norm)
 
 				// Apply Light to Vertices (Lighting needs to be calculated in World Space):
 				Vector3 faceNormal = CreateFaceNormal(triangle);
+				if (shadeMode == ShadeMode::Flat) {
+					triangle[0].color *= LightManager::Get()->ComputeLightColor(triangle[0].pos, faceNormal);
+					triangle[1].color *= LightManager::Get()->ComputeLightColor(triangle[1].pos, faceNormal);
+					triangle[2].color *= LightManager::Get()->ComputeLightColor(triangle[2].pos, faceNormal);
+				}
+				else if (shadeMode == ShadeMode::Gouraud) {
+					for (size_t t = 0; t < triangle.size(); ++t)
+					{
+						triangle[t].color *= LightManager::Get()->ComputeLightColor(triangle[t].pos, faceNormal);
+					}
+				}
 				for (size_t t = 0; t < triangle.size(); ++t)
 				{
 					triangle[t].color *= LightManager::Get()->ComputeLightColor(triangle[t].pos, faceNormal);

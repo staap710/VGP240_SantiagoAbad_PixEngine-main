@@ -46,6 +46,9 @@ CommandDictionary::CommandDictionary()
 	RegisterCommand<CmdSetColor>();
 	RegisterCommand<CmdSetFillMode>();
 	RegisterCommand<CmdEnableDepth>();
+	RegisterCommand<CmdSetShadeMode>();
+
+
 
 	// Primatives Commands
 	RegisterCommand<CmdBeginDraw>();
@@ -71,7 +74,7 @@ CommandDictionary::CommandDictionary()
 	RegisterCommand<CmdSetCameraDirection>();
 	RegisterCommand<CmdSetCameraNear>();
 	RegisterCommand<CmdSetCameraFar>();
-	RegisterCommand<CmdSetCameraFov>();
+	RegisterCommand<CmdSetCameraFOV>();
 
 	// Material Commands
 	RegisterCommand<CmdSetMaterialEmissive>();

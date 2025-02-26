@@ -9,7 +9,7 @@ void DrawLineLow(const Vertex& left, const Vertex& right)
 	for (int x = startX; x <= endX; x++)
 	{
 		float t = static_cast<float>(x - startX) / dx;
-		Rasterizer::Get()->DrawPoint(LerpVertex(left, right, t));
+		Rasterizer::Get()->DrawPoint(LerpVertex(left, right, t,shadeMode==ShadeMode::Phong));
 	}
 }
 
@@ -22,7 +22,7 @@ void DrawLineHigh(const Vertex& bottom, const Vertex& top)
 	for (int y = startY; y <= endY; ++y)
 	{
 		float t = static_cast<float>(y - startY) / dy;
-		Rasterizer::Get()->DrawPoint(LerpVertex(bottom, top, t));
+		Rasterizer::Get()->DrawPoint(LerpVertex(bottom, top, t, shadeMode==ShadeMode::Phong));
 	}
 }
 
@@ -41,6 +41,14 @@ void Rasterizer::SetFillMode(FillMode fillMode)
 {
 	mFillMode = fillMode;
 }
+void Rasterizer::SetShadeMode(ShadeMode shadeMode);
+{
+	mShadeMode = shadeMode;
+}
+ShadeMode Rasterizer::GetShadeMode() const
+{
+	return mShadeMode;
+}
 
 void Rasterizer::DrawPoint(int x, int y)
 {
@@ -53,6 +61,8 @@ void Rasterizer::DrawPoint(const Vertex& vertex)
 	int y = static_cast<int>(vertex.pos.y);
 	if (DepthBuffer::Get()->CheckDepthBuffer(x, y, vertex.pos.z))
 	{
+		X::Color color = vertex.color;
+		DepthBuffer::Get()->WriteDepthBuffer(x, y, vertex.pos.z);
 		SetColor(vertex.color);
 		DrawPoint(x,y);
 	}

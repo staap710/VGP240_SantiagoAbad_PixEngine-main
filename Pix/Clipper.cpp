@@ -108,6 +108,7 @@ bool Clipper::ClipLine(Vertex& a, Vertex& b)
 		return false;
 	}
 
+
 	float minX = Viewport::Get()->GetMinX();
 	float maxX = Viewport::Get()->GetMaxX();
 	float minY = Viewport::Get()->GetMinY();
