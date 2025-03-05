@@ -3,6 +3,7 @@
 #include "CmdDrawPixel.h"
 #include "CmdSetResolution.h"
 #include "CmdVarFloat.h"
+#include "CmdVarBool.h"
 #include "CmdSetColor.h"
 #include "CmdSetFillMode.h"
 
@@ -13,16 +14,16 @@
 #include "CmdSetViewport.h"
 #include "CmdShowViewport.h"
 #include "CmdSetClipping.h"
-
 #include "CmdMatrix.h"
 #include "CmdCamera.h"
-
 #include "CmdSetCullMode.h"
 #include "CmdEnableDepth.h"
-#include "CmdVarBool.h"
-
 #include "CmdMaterial.h"
 #include "CmdLights.h"
+#include "CmdModel.h"
+#include "CmdSetShadeMode.h"
+
+
 
 CommandDictionary* CommandDictionary::Get()
 {
@@ -34,34 +35,32 @@ CommandDictionary::CommandDictionary()
 {
 	// Initialize dictionary
 
-	// Setting Commands
+	// Setting commands
 	RegisterCommand<CmdSetResolution>();
 
-	// Variable Commands
+	// Variable commands
 	RegisterCommand<CmdVarFloat>();
 	RegisterCommand<CmdVarBool>();
 
-	// Rasterization Commands
+	// Rasterization commands
 	RegisterCommand<CmdDrawPixel>();
 	RegisterCommand<CmdSetColor>();
 	RegisterCommand<CmdSetFillMode>();
 	RegisterCommand<CmdEnableDepth>();
 	RegisterCommand<CmdSetShadeMode>();
 
-
-
-	// Primatives Commands
+	//Primitives commands
 	RegisterCommand<CmdBeginDraw>();
 	RegisterCommand<CmdEndDraw>();
 	RegisterCommand<CmdAddVertex>();
-	RegisterCommand<CmdSetCullMode>(); // Culling Command
+	RegisterCommand<CmdSetCullMode>();
+	RegisterCommand<CmdModel>();
 
-	// Viewport Commands
+	// Viewport commands
 	RegisterCommand<CmdSetViewport>();
 	RegisterCommand<CmdShowViewport>();
 	RegisterCommand<CmdSetClipping>();
 
-	// Matrix Commands
 	RegisterCommand<CmdPushTranslation>();
 	RegisterCommand<CmdPushRotationX>();
 	RegisterCommand<CmdPushRotationY>();
@@ -69,26 +68,28 @@ CommandDictionary::CommandDictionary()
 	RegisterCommand<CmdPushScaling>();
 	RegisterCommand<CmdPopMatrix>();
 
-	// Camera Commands
+	//Camera commands
 	RegisterCommand<CmdSetCameraPosition>();
 	RegisterCommand<CmdSetCameraDirection>();
 	RegisterCommand<CmdSetCameraNear>();
 	RegisterCommand<CmdSetCameraFar>();
 	RegisterCommand<CmdSetCameraFOV>();
 
-	// Material Commands
+	//Material commands
 	RegisterCommand<CmdSetMaterialEmissive>();
 	RegisterCommand<CmdSetMaterialAmbient>();
 	RegisterCommand<CmdSetMaterialDiffuse>();
 	RegisterCommand<CmdSetMaterialSpecular>();
 	RegisterCommand<CmdSetMaterialShininess>();
 
-	// Light Commands
+	//Light commands
 	RegisterCommand<CmdSetLightAmbient>();
 	RegisterCommand<CmdSetLightDiffuse>();
 	RegisterCommand<CmdSetLightSpecular>();
 	RegisterCommand<CmdAddDirectionalLight>();
 	RegisterCommand<CmdAddPointLight>();
+	RegisterCommand<CmdAddSpotLight>();
+
 }
 
 TextEditor::LanguageDefinition CommandDictionary::GenerateLanguageDefinition()

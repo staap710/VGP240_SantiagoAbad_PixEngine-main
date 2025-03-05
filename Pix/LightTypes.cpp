@@ -1,79 +1,142 @@
-#include "LightManager.h"
-#include "MaterialManager.h"
 #include "LightTypes.h"
+#include "MaterialManager.h"
+#include "Camera.h"
 
-LightManager* LightManager::Get()
+X::Color DirectionalLight::ComputeLightColor(const Vector3& position, const Vector3& normal)
 {
-    static LightManager sInstance;
-    return &sInstance;
+	Camera* camera = Camera::Get();
+	MaterialManager* mm = MaterialManager::Get();
+
+	// calculate ambient color
+	X::Color colorAmbient = mAmbient * mm->GetMaterialAmbient();
+
+	// calculate diffuse color
+	//directional light iL = 1.0f; (light intensity)
+	Vector3 L = -mDirection;
+	float dot = X::Math::Max(MathHelper::Dot(L, normal), 0.0f);
+	X::Color colorDiffuse = mDiffuse * mm->GetMaterialDiffuse() * dot;
+
+	// calculate specular color
+	// directional light iL = 1.0f; (light intensity)
+	Vector3 v = MathHelper::Normalize(camera->GetPosition() - position);
+	Vector3 r = MathHelper::Normalize(L + v);
+	float fallOff = X::Math::Max((float)pow(MathHelper::Dot(r, normal), mm->GetMaterialShininess()), 0.0f);
+	X::Color colorSpecular = mSpecular * mm->GetMaterialSpecular() * fallOff;
+
+	return colorAmbient + colorDiffuse + colorSpecular;
 }
 
-void LightManager::OnNewFrame()
+void DirectionalLight::SetDirection(const Vector3& direction)
 {
-    mLights.clear();
-    mAmbient = X::Colors::White;
-    mDiffuse = X::Colors::White;
-    mSpecular = X::Colors::White;
+	mDirection = MathHelper::Normalize(direction);
 }
 
-void LightManager::SetLightAmbient(const X::Color& color)
+
+// PointLight
+X::Color PointLight::ComputeLightColor(const Vector3& position, const Vector3& normal)
 {
-    mAmbient = color;
+	Camera* camera = Camera::Get();
+	MaterialManager* mm = MaterialManager::Get();
+
+	// direction to light
+	Vector3 L = mPosition - position;
+	float distance = MathHelper::Magnitude(L);
+	L /= distance;
+
+	// calculate iL
+	float attenuation = 1.0f / (mAttenConst + (mAttenLinear * distance) + (mAttenQuad * distance * distance));
+	float iL = X::Math::Clamp(attenuation, 0.0f, 1.0f);
+
+	// calculate ambient color
+	X::Color colorAmbient = mAmbient * mm->GetMaterialAmbient();
+
+	// calculate diffuse color
+	float dot = X::Math::Max(MathHelper::Dot(L, normal), 0.0f);
+	X::Color colorDiffuse = mDiffuse * mm->GetMaterialDiffuse() * dot * iL;
+
+	// calculate specular color
+	Vector3 v = MathHelper::Normalize(camera->GetPosition() - position);
+	Vector3 r = MathHelper::Normalize(L + v);
+	float fallOff = X::Math::Max((float)pow(MathHelper::Dot(r, normal), mm->GetMaterialShininess()), 0.0f);
+	X::Color colorSpecular = mSpecular * mm->GetMaterialSpecular() * fallOff * iL;
+
+	return colorAmbient + colorDiffuse + colorSpecular;
 }
 
-void LightManager::SetLightDiffuse(const X::Color& color)
+void PointLight::SetPosition(const Vector3& position)
 {
-    mDiffuse = color;
+	mPosition = position;
+}
+void PointLight::SetAttenuation(float constant, float linear, float quadratic)
+{
+	mAttenConst = constant;
+	mAttenLinear = linear;
+	mAttenQuad = quadratic;
 }
 
-void LightManager::SetLightSpecular(const X::Color& color)
+//Spot light
+X::Color SpotLight::ComputeLightColor(const Vector3& position, const Vector3& normal)
 {
-    mSpecular = color;
+	Camera* camera = Camera::Get();
+	MaterialManager* mm = MaterialManager::Get();
+
+	// direction to light
+	Vector3 L = mPosition - position;
+	float distance = MathHelper::Magnitude(L);
+	L /= distance;
+
+	// calculate ambient color
+	X::Color colorAmbient = mAmbient * mm->GetMaterialAmbient();
+
+	Vector3 lightDir = -L;
+	float dirDot = MathHelper::Dot(lightDir, mDirection);
+	if (dirDot < mCosAngle)
+	{
+		return colorAmbient;
+	}
+
+	// calculate iL
+	float spot = pow(dirDot, mDecay);
+	float attenuation = spot / (mAttenConst + (mAttenLinear * distance) + (mAttenQuad * distance * distance));
+	float iL = X::Math::Clamp(attenuation, 0.0f, 1.0f);
+
+	// calculate diffuse color
+	float dot = X::Math::Max(MathHelper::Dot(L, normal), 0.0f);
+	X::Color colorDiffuse = mDiffuse * mm->GetMaterialDiffuse() * dot * iL;
+
+	// calculate specular color
+	Vector3 v = MathHelper::Normalize(camera->GetPosition() - position);
+	Vector3 r = MathHelper::Normalize(L + v);
+	float fallOff = X::Math::Max((float)pow(MathHelper::Dot(r, normal), mm->GetMaterialShininess()), 0.0f);
+	X::Color colorSpecular = mSpecular * mm->GetMaterialSpecular() * fallOff * iL;
+
+	return colorAmbient + colorDiffuse + colorSpecular;
 }
 
-void  LightManager::AddDirectionalLight(const Vector3& direction)
+void SpotLight::SetPosition(const Vector3& position)
 {
-    auto light = std::make_unique<DirectionalLight>();
-    light->SetAmbient(mAmbient);
-    light->SetDiffuse(mDiffuse);
-    light->SetSpecular(mSpecular);
-    light->SetDirection(direction);
-    mLights.emplace_back(std::move(light));
+	mPosition = position;
 }
 
-void LightManager::AddPointLight(const Vector3& position, float constant, float linear, float quadratic)
+void SpotLight::SetDirection(const Vector3& direction)
 {
-    auto light = std::make_unique<PointLight>();
-    light->SetAmbient(mAmbient);
-    light->SetDiffuse(mDiffuse);
-    light->SetSpecular(mSpecular);
-    light->SetPosition(position);
-    light->SetAttenuation(constant, linear, quadratic);
-    mLights.emplace_back(std::move(light));
+	mDirection = direction;
 }
 
-void LightManager::AddSpotLight(const Vector3& position, const Vector3& direction, float constant, float linear, float quadratic, float angle, float decay)
+void SpotLight::SetAttenuation(float constant, float linear, float quadratic)
 {
-    auto light = std::make_unique<SpotLight>();
-    light->SetAmbient(mAmbient);
-    light->SetDiffuse(mDiffuse);
-    light->SetSpecular(mSpecular);
-    light->SetPosition(position);
-    light->SetDirection(direction);
-    light->SetAttenuation(constant, linear, quadratic);
-    light->SetAngle(angle);
-    light->SetDecay(decay);
-    mLights.emplace_back(std::move(light));
+	mAttenConst = constant;
+	mAttenLinear = linear;
+	mAttenQuad = quadratic;
+
 }
 
-X::Color LightManager::ComputeLightColor(const Vector3& position, const Vector3& normal) const
+void SpotLight::SetAngle(float angle)
 {
-    X::Color color = MaterialManager::Get()->GetMaterialEmissive();
+	mCosAngle = cos(angle);
+}
 
-    for (auto& light : mLights)
-    {
-        color += light->ComputeLightColor(position, normal);
-    }
-
-    return color;
+void SpotLight::SetDecay(float decay)
+{
+	mDecay = decay;
 }

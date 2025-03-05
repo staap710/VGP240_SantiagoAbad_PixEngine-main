@@ -1,7 +1,8 @@
 #pragma once
+
 #include "Command.h"
 
-class CmdSetShadeMode :public Command
+class CmdSetShadeMode : public Command
 {
 public:
 	const char* GetName() override
@@ -12,10 +13,10 @@ public:
 	const char* GetDescription() override
 	{
 		return
-			"SetShadeMode(<mode>)"
+			"SetShadeMode(shadeMode)\n"
 			"\n"
-			"flat, gourand, phong";
+			"- flat, gouraud, phong";
 	}
-	bool Execute(const std::vector<std::string>& params) override;
 
+	bool Execute(const std::vector<std::string>& params) override;
 };

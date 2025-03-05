@@ -1,5 +1,5 @@
-#include "CmdModel.h"
 #include "ModelManager.h"
+#include "CmdModel.h"
 #include "PrimativesManager.h"
 
 bool CmdModel::Execute(const std::vector<std::string>& params)
@@ -11,7 +11,7 @@ bool CmdModel::Execute(const std::vector<std::string>& params)
 
 	const Model* model = ModelManager::Get()->GetModel(params[0]);
 	PrimativesManager* pm = PrimativesManager::Get();
-	for (uint32_t i = 0; i < model->GetVertexCount(); i++)
+	for (uint32_t i = 0; i < model->GetVertexCount(); ++i)
 	{
 		pm->AddVertex(model->GetVertex(i));
 	}
