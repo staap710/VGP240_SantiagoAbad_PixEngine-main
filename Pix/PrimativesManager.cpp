@@ -15,11 +15,14 @@ namespace
 	{
 		float hw = gResolutionX * 0.5f;
 		float hh = gResolutionY * 0.5f;
-		return Matrix4(
+
+		return Matrix4
+		(
 			hw, 0.0f, 0.0f, 0.0f,
 			0.0f, -hh, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.0f,
-			hw, hh, 0.0f, 1.0f);
+			hw, hh, 0.0f, 1.0f
+		);
 	}
 
 	bool CullTriangle(CullMode mode, const std::vector<Vertex>& triangleInNDC)
@@ -60,6 +63,7 @@ PrimativesManager* PrimativesManager::Get()
 	static PrimativesManager sInstance;
 	return &sInstance;
 }
+
 PrimativesManager::PrimativesManager()
 {
 
@@ -68,11 +72,17 @@ PrimativesManager::PrimativesManager()
 void PrimativesManager::OnNewFrame()
 {
 	mCullMode = CullMode::Back;
+	mCorrectUV = false;
 }
 
 void PrimativesManager::SetCullMode(CullMode mode)
 {
 	mCullMode = mode;
+}
+
+void PrimativesManager::SetCorrectUV(bool correctUV)
+{
+	mCorrectUV = correctUV;
 }
 
 bool PrimativesManager::BeginDraw(Topology topology, bool applyTransform)
@@ -83,6 +93,7 @@ bool PrimativesManager::BeginDraw(Topology topology, bool applyTransform)
 	mVertexBuffer.clear();
 	return true;
 }
+
 void PrimativesManager::AddVertex(const Vertex& vertex)
 {
 	if (mDrawBegin) {
@@ -92,22 +103,20 @@ void PrimativesManager::AddVertex(const Vertex& vertex)
 
 bool PrimativesManager::EndDraw()
 {
-	if (!mDrawBegin)
-	{
+	if (!mDrawBegin) {
 		return false;
 	}
 
-
-
-	switch (mTopology) {
+	switch (mTopology)
+	{
 	case Topology::Point:
 	{
-		for (size_t i = 0; i < mVertexBuffer.size(); ++i) {
+		for (size_t i = 0; i < mVertexBuffer.size(); ++i)
+		{
 			if (!Clipper::Get()->ClipPoint(mVertexBuffer[i]))
 			{
 				Rasterizer::Get()->DrawPoint(mVertexBuffer[i]);
 			}
-
 		}
 	}
 	break;
@@ -115,19 +124,15 @@ bool PrimativesManager::EndDraw()
 	{
 		for (size_t i = 1; i < mVertexBuffer.size(); i += 2)
 		{
-
-
 			if (!Clipper::Get()->ClipLine(mVertexBuffer[i - 1], mVertexBuffer[i]))
 			{
 				Rasterizer::Get()->DrawLine(mVertexBuffer[i - 1], mVertexBuffer[i]);
 			}
-
 		}
 	}
 	break;
 	case Topology::Triangle:
 	{
-
 		for (size_t i = 2; i < mVertexBuffer.size(); i += 3)
 		{
 			std::vector<Vertex> triangle = { mVertexBuffer[i - 2], mVertexBuffer[i - 1], mVertexBuffer[i] };
@@ -141,13 +146,13 @@ bool PrimativesManager::EndDraw()
 				Matrix4 matNDC = matView * matProj;
 				ShadeMode shadeMode = Rasterizer::Get()->GetShadeMode();
 
-				// transform position to world space
+				// Transform Positons to World space:
 				for (size_t t = 0; t < triangle.size(); ++t)
 				{
 					triangle[t].pos = MathHelper::TransformCoord(triangle[t].pos, matWorld);
 					triangle[t].posWorld = triangle[t].pos;
 				}
-				// if we dont have a normal, add one
+				// If we dont have a normal, add one
 				if (MathHelper::IsEqual(MathHelper::MagnitudeSquared(triangle[0].norm), 0.0f))
 				{
 					Vector3 faceNormal = CreateFaceNormal(triangle);
@@ -156,7 +161,7 @@ bool PrimativesManager::EndDraw()
 						triangle[t].norm = faceNormal;
 					}
 				}
-				//if we have, transform into world space
+				// If we DO have one, Transform into World Space
 				else
 				{
 					for (size_t t = 0; t < triangle.size(); ++t)
@@ -165,43 +170,52 @@ bool PrimativesManager::EndDraw()
 					}
 				}
 
-				//apply light vertices
-				// lighting needs to be calculated in world space (vertex lighting and pixel lighting)
-
-				Vector3 faceNormal = CreateFaceNormal(triangle);
-				if (shadeMode == ShadeMode::Flat)
+				// If color are UV's (z < o.0f) do not apply flat or gouraud light mode shading.
+				// Color is not a valid color, but a UV coordinate.
+				if (triangle[0].color.z >= 0.0f)
 				{
-					triangle[0].color *= LightManager::Get()->ComputeLightColor(triangle[0].pos, triangle[0].norm);
-					triangle[1].color = triangle[0].color;
-					triangle[2].color = triangle[0].color;
-				}
-				else if (shadeMode == ShadeMode::Gouraud)
-				{
-					for (size_t t = 0; t < triangle.size(); ++t)
+					// Apply Light to Vertices (Lighting needs to be calculated in World Space):
+					Vector3 faceNormal = CreateFaceNormal(triangle);
+					if (shadeMode == ShadeMode::Flat)
 					{
-						triangle[t].color *= LightManager::Get()->ComputeLightColor(triangle[t].pos, triangle[t].norm);
+						triangle[0].color *= LightManager::Get()->ComputeLightColor(triangle[0].pos, triangle[0].norm);
+						triangle[1].color = triangle[0].color;
+						triangle[2].color = triangle[0].color;
+					}
+					else if (shadeMode == ShadeMode::Gouraud)
+					{
+						for (size_t t = 0; t < triangle.size(); ++t)
+						{
+							triangle[t].color *= LightManager::Get()->ComputeLightColor(triangle[t].pos, triangle[t].norm);
+						}
 					}
 				}
 
-
-				for (size_t t = 0; t < triangle.size(); ++t)
+				else if (mCorrectUV)
 				{
-					triangle[t].color *= LightManager::Get()->ComputeLightColor(triangle[t].pos, faceNormal);
+					// Apply perspective correction to UV's in View Space:
+					for (size_t t = 0; t < triangle.size(); ++t)
+					{
+						Vector3 viewSpacePos = MathHelper::TransformCoord(triangle[t].posWorld, matView);
+						triangle[t].color.x /= viewSpacePos.z;
+						triangle[t].color.y /= viewSpacePos.z;
+						triangle[t].color.w = 1.0f / viewSpacePos.z;
+					}
 				}
 
-				//transform to NDC space
+				// Transform Position to NDC space:
 				for (size_t t = 0; t < triangle.size(); ++t)
 				{
 					triangle[t].pos = MathHelper::TransformCoord(triangle[t].pos, matNDC);
 				}
 
-				//check if the triangle is back facing
+				// Check if triangle should be culled in NDC space.
 				if (CullTriangle(mCullMode, triangle))
 				{
-					continue;
+					continue; // Restarts the loop from the start.
 				}
 
-				//tranform from NDC to screen space
+				// Transform from NDC space to Screen space.
 				for (size_t t = 0; t < triangle.size(); ++t)
 				{
 					triangle[t].pos = MathHelper::TransformCoord(triangle[t].pos, matScreen);
@@ -211,12 +225,11 @@ bool PrimativesManager::EndDraw()
 
 			if (!Clipper::Get()->ClipTriangle(triangle))
 			{
-				for (size_t v = 2; v < triangle.size(); ++v)
+				for (size_t v = 2; v < triangle.size(); v++)
 				{
 					Rasterizer::Get()->DrawTriangle(triangle[0], triangle[v - 1], triangle[v]);
 				}
 			}
-
 		}
 	}
 	break;

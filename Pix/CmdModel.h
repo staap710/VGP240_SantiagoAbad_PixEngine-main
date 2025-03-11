@@ -5,19 +5,17 @@
 class CmdModel : public Command
 {
 public:
-	const char* GetName() override
-	{
-		return "Model";
-	}
+    const char* GetName() override
+    {
+        return "Model";
+    }
 
-	const char* GetDescription() override
-	{
-		return
-			"Model(fileName)"
-			"\n"
-			"- loads a model into memory and adds vertices to primitives manager";
-	}
+    const char* GetDescription() override
+    {
+        return "Model (fileName)"
+            "\n"
+            "- Loads a model into memory and adds vertices to primatives manager.";
+    }
 
-	bool Execute(const std::vector<std::string>& params) override;
-
+    bool Execute(const std::vector<std::string>& params) override;
 };

@@ -2,21 +2,33 @@
 
 #include <XEngine.h>
 
-class MyClass
+enum class AddressMode
 {
-public:
-	void Load(const std::string& fileName);
-	const std::string& GetFilename() const;
-	X::Color GetPixel(int u, int v) const;
-	int GetWidth() const;
-	int GetHeight() const;
-private:
-	X::Color GetPixel(int u, int v) const;
-	std::string mFileName;
-	std::unique_ptr<X::Color[]> mPixels;
-	X::TextureId mTextureId = 0;
-	int mWidth = 0;
-	int mHeight = 0;
-
+    Border,
+    Clamp,
+    Wrap,
+    Mirror
 };
 
+class Texture
+{
+public:
+    void Load(const std::string& fileName);
+    const std::string& GetFileName() const;
+
+    // u & v are in the range of [0, 1]
+    X::Color GetPixel(float u, float v, bool filter, AddressMode addressMode) const;
+
+    // Texel Coordinates
+    X::Color GetPixel(int u, int v) const;
+
+    int GetWidth() const;
+    int GetHeight() const;
+
+private:
+
+    std::string mFileName;
+    std::unique_ptr<X::Color[]> mPixels;
+    int mWidth = 0;
+    int mHeight = 0;
+};

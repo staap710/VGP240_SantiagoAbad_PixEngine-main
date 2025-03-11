@@ -3,7 +3,6 @@
 #include "CmdDrawPixel.h"
 #include "CmdSetResolution.h"
 #include "CmdVarFloat.h"
-#include "CmdVarBool.h"
 #include "CmdSetColor.h"
 #include "CmdSetFillMode.h"
 
@@ -14,16 +13,23 @@
 #include "CmdSetViewport.h"
 #include "CmdShowViewport.h"
 #include "CmdSetClipping.h"
+
 #include "CmdMatrix.h"
 #include "CmdCamera.h"
+
 #include "CmdSetCullMode.h"
 #include "CmdEnableDepth.h"
+#include "CmdVarBool.h"
+
 #include "CmdMaterial.h"
 #include "CmdLights.h"
 #include "CmdModel.h"
 #include "CmdSetShadeMode.h"
 
-
+#include "CmdSetTexture.h"
+#include "CmdSetCorrectUV.h"
+#include "CmdSetUseFilter.h"
+#include "CmdSetAddressMode.h"
 
 CommandDictionary* CommandDictionary::Get()
 {
@@ -35,32 +41,37 @@ CommandDictionary::CommandDictionary()
 {
 	// Initialize dictionary
 
-	// Setting commands
+	// Setting Commands
 	RegisterCommand<CmdSetResolution>();
 
-	// Variable commands
+	// Variable Commands
 	RegisterCommand<CmdVarFloat>();
 	RegisterCommand<CmdVarBool>();
 
-	// Rasterization commands
+	// Rasterization Commands
 	RegisterCommand<CmdDrawPixel>();
 	RegisterCommand<CmdSetColor>();
 	RegisterCommand<CmdSetFillMode>();
 	RegisterCommand<CmdEnableDepth>();
 	RegisterCommand<CmdSetShadeMode>();
 
-	//Primitives commands
+	// Primatives Commands
 	RegisterCommand<CmdBeginDraw>();
 	RegisterCommand<CmdEndDraw>();
 	RegisterCommand<CmdAddVertex>();
-	RegisterCommand<CmdSetCullMode>();
-	RegisterCommand<CmdModel>();
+	RegisterCommand<CmdSetCullMode>(); // Culling Command
+	RegisterCommand<CmdModel>(); // Model Command
+	RegisterCommand<CmdSetTexture>(); // Texture Command
+	RegisterCommand<CmdSetCorrectUV>(); // Correct UV Command
+	RegisterCommand<CmdSetUseFilter>(); // Use Bilinear Filter Command
+	RegisterCommand<CmdSetAddressMode>(); // Address Mode Command
 
-	// Viewport commands
+	// Viewport Commands
 	RegisterCommand<CmdSetViewport>();
 	RegisterCommand<CmdShowViewport>();
 	RegisterCommand<CmdSetClipping>();
 
+	// Matrix Commands
 	RegisterCommand<CmdPushTranslation>();
 	RegisterCommand<CmdPushRotationX>();
 	RegisterCommand<CmdPushRotationY>();
@@ -68,28 +79,27 @@ CommandDictionary::CommandDictionary()
 	RegisterCommand<CmdPushScaling>();
 	RegisterCommand<CmdPopMatrix>();
 
-	//Camera commands
+	// Camera Commands
 	RegisterCommand<CmdSetCameraPosition>();
 	RegisterCommand<CmdSetCameraDirection>();
 	RegisterCommand<CmdSetCameraNear>();
 	RegisterCommand<CmdSetCameraFar>();
-	RegisterCommand<CmdSetCameraFOV>();
+	RegisterCommand<CmdSetCameraFov>();
 
-	//Material commands
+	// Material Commands
 	RegisterCommand<CmdSetMaterialEmissive>();
 	RegisterCommand<CmdSetMaterialAmbient>();
 	RegisterCommand<CmdSetMaterialDiffuse>();
 	RegisterCommand<CmdSetMaterialSpecular>();
 	RegisterCommand<CmdSetMaterialShininess>();
 
-	//Light commands
+	// Light Commands
 	RegisterCommand<CmdSetLightAmbient>();
 	RegisterCommand<CmdSetLightDiffuse>();
 	RegisterCommand<CmdSetLightSpecular>();
 	RegisterCommand<CmdAddDirectionalLight>();
 	RegisterCommand<CmdAddPointLight>();
 	RegisterCommand<CmdAddSpotLight>();
-
 }
 
 TextEditor::LanguageDefinition CommandDictionary::GenerateLanguageDefinition()
