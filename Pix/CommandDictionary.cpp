@@ -84,7 +84,7 @@ CommandDictionary::CommandDictionary()
 	RegisterCommand<CmdSetCameraDirection>();
 	RegisterCommand<CmdSetCameraNear>();
 	RegisterCommand<CmdSetCameraFar>();
-	RegisterCommand<CmdSetCameraFov>();
+	RegisterCommand<CmdSetCameraFOV>();
 
 	// Material Commands
 	RegisterCommand<CmdSetMaterialEmissive>();
