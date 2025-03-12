@@ -18,4 +18,5 @@ void Graphics::NewFrame()
 	PrimativesManager::Get()->OnNewFrame();
 	DepthBuffer::Get()->OnNewFrame();
 	MaterialManager::Get()->OnNewFrame();
+	PostProcessing::Get()->onNewFrame();
 }

@@ -100,6 +100,11 @@ CommandDictionary::CommandDictionary()
 	RegisterCommand<CmdAddDirectionalLight>();
 	RegisterCommand<CmdAddPointLight>();
 	RegisterCommand<CmdAddSpotLight>();
+
+	// Post Processing Commands
+	RegisterCommand<CmdPostProcessingBeginDraw>();
+	RegisterCommand<CmdPostProcessingEndDraw>();
+	RegisterCommand<CmdPostProcessingSetEffect>();
 }
 
 TextEditor::LanguageDefinition CommandDictionary::GenerateLanguageDefinition()

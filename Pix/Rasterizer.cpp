@@ -57,7 +57,9 @@ ShadeMode Rasterizer::GetShadeMode()
 
 void Rasterizer::DrawPoint(int x, int y)
 {
-	X::DrawPixel(x, y, mColor);
+	if (!PostProcessing::Get()->Draw(x, y, mColor)) {
+		X::DrawPixel(x, y, mColor);
+	}
 }
 
 void Rasterizer::DrawPoint(const Vertex& vertex)
